@@ -1,0 +1,76 @@
+{% extends "base.html.twig" %}
+{% block title %}Modifier -
+	{{ article.title }}
+{% endblock %}
+
+{% block body %}
+	<div style="max-width: 800px; margin: 0 auto; padding: 20px;">
+		<nav style="margin-bottom: 20px;">
+			<div style="display: flex; gap: 5px; font-size: 14px;">
+				<a href="{{ path('app_home') }}" style="color: #3498db; text-decoration: none;">Accueil</a>
+				<span style="color: #777;">/</span>
+				<a href="{{ path('app_article_show', {'id': article.id}) }}" style="color: #3498db; text-decoration: none;">{{ article.title }}</a>
+				<span style="color: #777;">/</span>
+				<span style="color: #333; font-weight: bold;">Modifier</span>
+			</div>
+		</nav>
+
+		<div style="border: 1px solid #ddd; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+			<div style="background-color: #3498db; color: white; padding: 15px; border-top-left-radius: 4px; border-top-right-radius: 4px;">
+				<h1 style="margin: 0; font-size: 22px;">Modifier l'article</h1>
+			</div>
+			<div style="padding: 20px;">
+				{{ form_start(form, {'attr': {'class': 'needs-validation'}}) }}
+				<div style="margin-bottom: 20px;">
+					{{ form_label(form.title, 'Titre', {'label_attr': {'style': 'display: block; margin-bottom: 8px; font-weight: bold;'}}) }}
+					{{ form_widget(form.title, {
+                        'attr': {
+                            'style': 'width: 100%; padding: 10px; border: 2px solid #3498db; border-radius: 4px; font-size: 16px;',
+                            'placeholder': 'Saisissez le titre de l\'article'
+                        }
+                    }) }}
+                    {{ form_errors(form.title) }}
+                </div>
+                
+                <div style="margin-bottom: 20px;">
+                    {{ form_label(form.content, 'Contenu', {'label_attr': {'style': 'display: block; margin-bottom: 8px; font-weight: bold;'}}) }}
+                    {{ form_widget(form.content, {
+                        'attr': {
+                            'style': 'width: 100%; padding: 10px; border: 2px solid #3498db; border-radius: 4px; min-height: 200px; font-size: 16px;',
+                            'rows': 10,
+                            'placeholder': 'Écrivez votre article ici...'
+                        }
+                    }) }}
+                    {{ form_errors(form.content) }}
+                </div>
+                <div style="margin-bottom: 20px;">
+    {{ form_label(form.imageFile, 'Image', {'label_attr': {'style': 'display: block; margin-bottom: 8px; font-weight: bold;'}}) }}
+    
+    {% if article.imageFileName %}
+        <div style="margin-bottom: 10px;">
+            <img src="{{ asset('uploads/' ~ article.imageFilename) }}" alt="Image actuelle" style="max-width: 200px; max-height: 200px; border: 1px solid #ddd; border-radius: 4px;">
+            <p style="margin-top: 5px; font-size: 14px; color: #666;">Image actuelle</p>
+        </div>
+    {% endif %}
+    
+    {{ form_widget(form.imageFile, {
+        'attr': {
+            'style': 'width: 100%; padding: 10px; border: 2px solid #3498db; border-radius: 4px; font-size: 16px;',
+        }
+    }) }}
+    <small style="display: block; margin-top: 5px; color: #666;">Formats supportés: JPEG, PNG, GIF (max 2MB). Laissez vide pour conserver l'image actuelle.</small>
+    {{ form_errors(form.imageFile) }}
+				</div>
+
+				<div style="display: flex; gap: 10px;">
+					<button type="submit" style="background-color: #3498db; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold;">
+						<i class="fas fa-save"></i>
+						Enregistrer les modifications
+					</button>
+					<a href="{{ path('app_article_show', {'id': article.id}) }}" style="background-color: #f8f9fa; color: #333; padding: 10px 15px; border: 1px solid #ddd; border-radius: 4px; text-decoration: none;">Annuler</a>
+				</div>
+				{{ form_end(form) }}
+			</div>
+		</div>
+	</div>
+{% endblock %}

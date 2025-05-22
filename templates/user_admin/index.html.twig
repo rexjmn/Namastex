@@ -1,0 +1,84 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion d'utilisateurs{% endblock %}
+
+{% block body %}
+<div style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+        <h1 style="margin: 0; font-size: 32px; color: #333;">Gestion d'utilisateurs</h1>
+        <a href="{{ path('app_admin_dashboard') }}" style="background-color: #3498db; color: white; padding: 10px 15px; border-radius: 5px; text-decoration: none; display: inline-flex; align-items: center; gap: 5px;">
+            <i class="fas fa-arrow-left"></i>
+            Retour au Dashboard
+        </a>
+    </div>
+
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div style="background-color: {% if label == 'success' %}#DFF2BF; color: #4F8A10{% elseif label == 'error' %}#FFECEC; color: #C83025{% else %}#BDE5F8; color: #00529B{% endif %}; padding: 15px; margin-bottom: 20px; border-radius: 5px; border-left: 5px solid {% if label == 'success' %}#4F8A10{% elseif label == 'error' %}#C83025{% else %}#00529B{% endif %};">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+    <div style="background-color: white; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); overflow: hidden;">
+        <div style="padding: 20px; border-bottom: 1px solid #eee;">
+            <h2 style="margin: 0; font-size: 18px;">Liste des utilisateurs</h2>
+        </div>
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="background-color: #f8f9fa;">
+                        <th style="padding: 12px 15px; text-align: left; border-bottom: 1px solid #ddd;">ID</th>
+                        <th style="padding: 12px 15px; text-align: left; border-bottom: 1px solid #ddd;">Usuario</th>
+                        <th style="padding: 12px 15px; text-align: left; border-bottom: 1px solid #ddd;">Email</th>
+                        <th style="padding: 12px 15px; text-align: left; border-bottom: 1px solid #ddd;">Roles</th>
+                        <th style="padding: 12px 15px; text-align: center; border-bottom: 1px solid #ddd;">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                        <tr>
+                            <td style="padding: 12px 15px; border-bottom: 1px solid #ddd;">{{ user.id }}</td>
+                            <td style="padding: 12px 15px; border-bottom: 1px solid #ddd;">{{ user.username }}</td>
+                            <td style="padding: 12px 15px; border-bottom: 1px solid #ddd;">{{ user.email }}</td>
+                            <td style="padding: 12px 15px; border-bottom: 1px solid #ddd;">
+                                {% for role in user.roles %}
+                                    <span style="display: inline-block; padding: 3px 8px; margin-right: 5px; border-radius: 4px; font-size: 12px; background-color: {% if role == 'ROLE_SUPER_ADMIN' %}#e74c3c{% elseif role == 'ROLE_ADMIN' %}#f39c12{% else %}#3498db{% endif %}; color: white;">
+                                        {{ role|replace({'ROLE_': ''}) }}
+                                    </span>
+                                {% endfor %}
+                            </td>
+                            <td style="padding: 12px 15px; border-bottom: 1px solid #ddd; text-align: center;">
+                                {% if user != app.user %}
+                                    <div style="display: flex; justify-content: center; gap: 10px;">
+                                        <a href="{{ path('app_admin_users_toggle_admin', {'id': user.id}) }}" style="display: inline-block; padding: 5px 10px; border-radius: 4px; text-decoration: none; background-color: {% if 'ROLE_ADMIN' in user.roles %}#e74c3c{% else %}#f39c12{% endif %}; color: white; font-size: 13px;">
+                                            {% if 'ROLE_ADMIN' in user.roles %}
+                                                <i class="fas fa-user-minus"></i> Quitter Admin
+                                            {% else %}
+                                                <i class="fas fa-user-plus"></i> Devenir Admin
+                                            {% endif %}
+                                        </a>
+                                        <a href="{{ path('app_admin_users_toggle_super_admin', {'id': user.id}) }}" style="display: inline-block; padding: 5px 10px; border-radius: 4px; text-decoration: none; background-color: {% if 'ROLE_SUPER_ADMIN' in user.roles %}#e74c3c{% else %}#8e44ad{% endif %}; color: white; font-size: 13px;">
+                                            {% if 'ROLE_SUPER_ADMIN' in user.roles %}
+                                                <i class="fas fa-user-minus"></i> Quitter Super Admin
+                                            {% else %}
+                                                <i class="fas fa-user-plus"></i> Transformer en Super Admin
+                                            {% endif %}
+                                        </a>
+                                    </div>
+                                {% else %}
+                                    <span style="color: #777; font-style: italic;">Utilisateur actuel</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="5" style="padding: 20px; text-align: center; color: #666;">No se encontraron usuarios.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

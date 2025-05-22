@@ -1,0 +1,66 @@
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription{% endblock %}
+
+{% block body %}
+<div style="max-width: 600px; margin: 50px auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); background-color: white;">
+    <div style="text-align: center; margin-bottom: 30px;">
+        <h1 style="font-size: 28px; color: #2ecc71; margin-bottom: 10px;">Inscription</h1>
+        <p style="color: #666; font-size: 16px;">Créez votre compte pour accéder à toutes les fonctionnalités</p>
+    </div>
+
+    {{ form_errors(registrationForm) }}
+
+    {{ form_start(registrationForm) }}
+        <div style="margin-bottom: 20px;">
+            {{ form_label(registrationForm.email, 'Email', {'label_attr': {'style': 'display: block; margin-bottom: 8px; font-weight: bold;'}}) }}
+            {{ form_widget(registrationForm.email, {
+                'attr': {
+                    'style': 'width: 95%; padding: 10px; border: 2px solid #2ecc71; border-radius: 4px; font-size: 16px;',
+                    'placeholder': 'Entrez votre adresse email'
+                }
+            }) }}
+            {{ form_errors(registrationForm.email) }}
+        </div>
+
+        <div style="margin-bottom: 20px;">
+            {{ form_label(registrationForm.username, 'Nom d\'utilisateur', {'label_attr': {'style': 'display: block; margin-bottom: 8px; font-weight: bold;'}}) }}
+            {{ form_widget(registrationForm.username, {
+                'attr': {
+                    'style': 'width: 95%; padding: 10px; border: 2px solid #2ecc71; border-radius: 4px; font-size: 16px;',
+                    'placeholder': 'Entrez votre nom d\'utilisateur'
+                }
+            }) }}
+            {{ form_errors(registrationForm.username) }}
+        </div>
+
+        <div style="margin-bottom: 20px;">
+            {{ form_label(registrationForm.plainPassword, 'Mot de passe', {'label_attr': {'style': 'display: block; margin-bottom: 8px; font-weight: bold;'}}) }}
+            {{ form_widget(registrationForm.plainPassword, {
+                'attr': {
+                    'style': 'width: 95%; padding: 10px; border: 2px solid #2ecc71; border-radius: 4px; font-size: 16px;',
+                    'placeholder': 'Choisissez un mot de passe sécurisé'
+                }
+            }) }}
+            {{ form_errors(registrationForm.plainPassword) }}
+        </div>
+
+        <div style="margin-bottom: 20px;">
+            <div style="display: flex; align-items: center;">
+                {{ form_widget(registrationForm.agreeTerms, {'attr': {'style': 'margin-right: 10px;'}}) }}
+                {{ form_label(registrationForm.agreeTerms, 'J\'accepte les conditions d\'utilisation', {'label_attr': {'style': 'margin: 0;'}}) }}
+            </div>
+            {{ form_errors(registrationForm.agreeTerms) }}
+        </div>
+
+        <button type="submit" style="width: 100%; background-color: #2ecc71; color: white; padding: 12px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 16px;">
+            <i class="fas fa-user-plus"></i> S'inscrire
+        </button>
+    {{ form_end(registrationForm) }}
+
+    <div style="margin-top: 20px; text-align: center;">
+        <p style="color: #666;">Vous avez déjà un compte ? <a href="{{ path('app_login') }}" style="color: #2ecc71; text-decoration: none; font-weight: 500;">Connectez-vous</a></p>
+    </div>
+</div>
+{% endblock %}

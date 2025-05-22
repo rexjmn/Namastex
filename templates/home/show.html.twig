@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	{{ article.title }}
+{% endblock %}
+
+{% block body %}
+	<div style="max-width: 800px; margin: 0 auto; padding: 20px;">
+		<nav style="margin-bottom: 20px;">
+			<div style="display: flex; gap: 5px; font-size: 14px;">
+				<a href="{{ path('app_home') }}" style="color: #3498db; text-decoration: none;">Accueil</a>
+				<span style="color: #777;">/</span>
+				<span style="color: #333; font-weight: bold;">{{ article.title }}</span>
+			</div>
+		</nav>
+
+		{% for label, messages in app.flashes %}
+			{% for message in messages %}
+				<div style="background-color: {% if label == 'success' %}#DFF2BF; color: #4F8A10{% elseif label == 'error' %}#FFECEC; color: #C83025{% else %}#BDE5F8; color: #00529B{% endif %}; padding: 15px; margin-bottom: 20px; border-radius: 5px; border-left: 5px solid {% if label == 'success' %}#4F8A10{% elseif label == 'error' %}#C83025{% else %}#00529B{% endif %};">
+					{{ message }}
+				</div>
+			{% endfor %}
+		{% endfor %}
+
+		<article style="background-color: white; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); overflow: hidden;">
+			<header style="padding: 30px 30px 20px 30px; border-bottom: 1px solid #eee;">
+				<h1 style="margin-top: 0; margin-bottom: 10px; font-size: 28px; color: #333;">{{ article.title }}</h1>
+				<div style="display: flex; align-items: center; color: #666; font-size: 14px;">
+					<div style="display: flex; align-items: center; margin-right: 20px;">
+						<i class="fas fa-user-circle" style="font-size: 16px; margin-right: 5px;"></i>
+						{{ article.author.username }}
+					</div>
+					<div style="display: flex; align-items: center;">
+						<i class="fas fa-calendar-alt" style="font-size: 16px; margin-right: 5px;"></i>
+						{{ article.createdAt|date('d/m/Y à H:i') }}
+					</div>
+				</div>
+			</header>
+
+			{% if article.imageFilename %}
+				<div style="padding: 0 30px; margin-top: 30px;">
+					<img src="{{ asset('uploads/' ~ article.imageFilename) }}" alt="{{ article.title }}" style="max-width: 100%; border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+				</div>
+			{% endif %}
+
+			<div style="padding: 30px; line-height: 1.6; color: #333;">
+				{{ article.content|nl2br }}
+			</div>
+
+			<div style="padding: 20px 30px; border-top: 1px solid #eee; display: flex; gap: 10px;">
+				{% if is_granted('ROLE_ADMIN') or app.user == article.author %}
+					<a href="{{ path('app_article_edit', {'id': article.id}) }}" style="background-color: #f39c12; color: white; padding: 10px 15px; border-radius: 5px; text-decoration: none; display: inline-flex; align-items: center; gap: 5px;">
+						<i class="fas fa-edit"></i>
+						Modifier
+					</a>
+					<a href="{{ path('app_article_delete', {'id': article.id}) }}" style="background-color: #e74c3c; color: white; padding: 10px 15px; border-radius: 5px; text-decoration: none; display: inline-flex; align-items: center; gap: 5px;" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet article ?')">
+						<i class="fas fa-trash"></i>
+						Supprimer
+					</a>
+				{% endif %}
+				<a href="{{ path('app_home') }}" style="margin-left: auto; background-color: #f8f9fa; color: #333; padding: 10px 15px; border: 1px solid #ddd; border-radius: 5px; text-decoration: none; display: inline-flex; align-items: center; gap: 5px;">
+					<i class="fas fa-arrow-left"></i>
+					Retour à la liste
+				</a>
+			</div>
+		</article>
+	</div>
+{% endblock %}
