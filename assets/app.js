@@ -1,6 +1,5 @@
 import './bootstrap.js';
-import { Turbo } from '@hotwired/turbo';
-Turbo.session.drive = false; // Desactivar Turbo
+
 /*
  * Welcome to your app's main JavaScript file!
  *

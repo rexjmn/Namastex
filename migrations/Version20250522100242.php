@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20250522072236 extends AbstractMigration
+final class Version20250522100242 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -21,7 +21,7 @@ final class Version20250522072236 extends AbstractMigration
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql(<<<'SQL'
-            DROP INDEX UNIQ_IDENTIFIER_EMAIL ON user
+            ALTER TABLE user ADD is_verified TINYINT(1) NOT NULL
         SQL);
     }
 
@@ -29,7 +29,7 @@ final class Version20250522072236 extends AbstractMigration
     {
         // this down() migration is auto-generated, please modify it to your needs
         $this->addSql(<<<'SQL'
-            CREATE UNIQUE INDEX UNIQ_IDENTIFIER_EMAIL ON user (email)
+            ALTER TABLE user DROP is_verified
         SQL);
     }
 }

@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mot de passe oublié{% endblock %}
+
+{% block body %}
+<div style="max-width: 600px; margin: 50px auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); background-color: white;">
+    <div style="text-align: center; margin-bottom: 30px;">
+        <h1 style="font-size: 28px; color: #f39c12; margin-bottom: 10px;">
+            <i class="fas fa-key" style="margin-right: 10px;"></i>
+            Mot de passe oublié
+        </h1>
+        <p style="color: #666; font-size: 16px;">Saisissez votre adresse email pour recevoir un lien de réinitialisation</p>
+    </div>
+
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div style="background-color: {% if label == 'success' %}#DFF2BF; color: #4F8A10{% elseif label == 'error' %}#FFECEC; color: #C83025{% else %}#BDE5F8; color: #00529B{% endif %}; padding: 15px; margin-bottom: 20px; border-radius: 5px; border-left: 5px solid {% if label == 'success' %}#4F8A10{% elseif label == 'error' %}#C83025{% else %}#00529B{% endif %};">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+    {{ form_start(form) }}
+        <div style="margin-bottom: 20px;">
+            {{ form_label(form.email, 'Adresse email', {'label_attr': {'style': 'display: block; margin-bottom: 8px; font-weight: bold;'}}) }}
+            {{ form_widget(form.email, {
+                'attr': {
+                    'style': 'width: 95%; padding: 10px; border: 2px solid #f39c12; border-radius: 4px; font-size: 16px;'
+                }
+            }) }}
+            {{ form_errors(form.email) }}
+        </div>
+
+        <button type="submit" style="width: 100%; background-color: #f39c12; color: white; padding: 12px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 16px;">
+            <i class="fas fa-paper-plane"></i> Envoyer le lien de réinitialisation
+        </button>
+    {{ form_end(form) }}
+
+    <div style="margin-top: 20px; text-align: center;">
+        <p style="color: #666;">Vous vous souvenez de votre mot de passe ? 
+            <a href="{{ path('app_login') }}" style="color: #f39c12; text-decoration: none; font-weight: 500;">Se connecter</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

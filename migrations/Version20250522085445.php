@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20250521094222 extends AbstractMigration
+final class Version20250522085445 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -21,7 +21,10 @@ final class Version20250521094222 extends AbstractMigration
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql(<<<'SQL'
-            ALTER TABLE article ADD image_filename VARCHAR(255) DEFAULT NULL
+            DROP INDEX UNIQ_IDENTIFIER_EMAIL ON user
+        SQL);
+        $this->addSql(<<<'SQL'
+            ALTER TABLE user ADD token VARCHAR(255) DEFAULT NULL
         SQL);
     }
 
@@ -29,7 +32,10 @@ final class Version20250521094222 extends AbstractMigration
     {
         // this down() migration is auto-generated, please modify it to your needs
         $this->addSql(<<<'SQL'
-            ALTER TABLE article DROP image_filename
+            ALTER TABLE user DROP token
+        SQL);
+        $this->addSql(<<<'SQL'
+            CREATE UNIQUE INDEX UNIQ_IDENTIFIER_EMAIL ON user (email)
         SQL);
     }
 }

@@ -42,6 +42,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $username = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $token = null;
+
+    #[ORM\Column]
+    private ?bool $isVerified = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $resetPasswordToken = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $resetPasswordRequestedAt = null;
+
     public function __construct()
     {
         $this->articles = new ArrayCollection();
@@ -140,7 +152,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
     }
-public function getArticles(): Collection
+    public function getArticles(): Collection
     {
         return $this->articles;
     }
@@ -187,5 +199,59 @@ public function getArticles(): Collection
     public function isAdmin(): bool
     {
         return $this->hasRole('ROLE_ADMIN') || $this->hasRole('ROLE_SUPER_ADMIN');
+    }
+
+    public function getToken(): ?string
+    {
+        return $this->token;
+    }
+
+    public function setToken(string $token): static
+    {
+        $this->token = $token;
+
+        return $this;
+    }
+
+    public function isVerified(): ?bool
+    {
+        return $this->isVerified;
+    }
+
+    public function setIsVerified(bool $isVerified): static
+    {
+        $this->isVerified = $isVerified;
+
+        return $this;
+    }
+    public function getResetPasswordToken(): ?string
+    {
+        return $this->resetPasswordToken;
+    }
+
+    public function setResetPasswordToken(?string $resetPasswordToken): static
+    {
+        $this->resetPasswordToken = $resetPasswordToken;
+        return $this;
+    }
+
+    public function getResetPasswordRequestedAt(): ?\DateTimeImmutable
+    {
+        return $this->resetPasswordRequestedAt;
+    }
+
+    public function setResetPasswordRequestedAt(?\DateTimeImmutable $resetPasswordRequestedAt): static
+    {
+        $this->resetPasswordRequestedAt = $resetPasswordRequestedAt;
+        return $this;
+    }
+
+    public function isResetPasswordRequestExpired(int $ttl = 3600): bool
+    {
+        if (!$this->resetPasswordRequestedAt) {
+            return true;
+        }
+
+        return $this->resetPasswordRequestedAt->getTimestamp() + $ttl < time();
     }
 }
